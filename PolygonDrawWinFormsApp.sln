@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32228.343
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolygonDrawWinFormsApp", "PolygonDrawWinFormsApp.csproj", "{6A72F518-9E3B-468F-B850-95470554AD23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolygonDrawWinFormsApp", "PolygonDrawWinFormsApp\PolygonDrawWinFormsApp.csproj", "{6A72F518-9E3B-468F-B850-95470554AD23}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolygonPresentationUnit", "..\PolygonPresentationUnit\PolygonPresentationUnit.csproj", "{C4850BDD-1991-4087-A190-6A1847DC2625}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolygonPresentationUnit", "PolygonPresentationUnit\PolygonPresentationUnit.csproj", "{C4850BDD-1991-4087-A190-6A1847DC2625}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolygonProcessingUnit", "..\PolygonProcessingUnit\PolygonProcessingUnit.csproj", "{BE499170-804E-4992-B5B0-A652C7646690}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolygonProcessingUnit", "PolygonProcessingUnit\PolygonProcessingUnit.csproj", "{BE499170-804E-4992-B5B0-A652C7646690}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolygonModel", "..\PolygonModel\PolygonModel.csproj", "{B1D8105A-68A1-4A0B-A0A1-FC51B127DAB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolygonModel", "PolygonModel\PolygonModel.csproj", "{B1D8105A-68A1-4A0B-A0A1-FC51B127DAB5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
