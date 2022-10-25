@@ -155,8 +155,24 @@ namespace PolygonDrawWinFormsApp
                     default:
                         return;
                 }
+            else if (BezierButton.Checked)
+                switch (e.Button)
+                {
+                    case MouseButtons.Left:
+                        LeftButtonDownBezier(sender, e);
+                        break;
+                    default:
+                        return;
+                }
 
             presU.RedrawCanvas();
+        }
+
+        private void LeftButtonDownBezier(object sender, MouseEventArgs e)
+        {
+            (_, var edge, _) = Utils.GetTargetObjects(presU.Polygons, e.X, e.Y);
+
+            presU.ConvertToBezier(edge);
         }
 
         /// <summary>

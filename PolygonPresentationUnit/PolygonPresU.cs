@@ -103,6 +103,19 @@ namespace PolygonApp.PolygonPresentationUnit
             RedrawCanvas();
         }
 
+        public void ConvertToBezier(Edge e)
+        {
+            float dx = (e.Destination.X - e.Source.X) / 3;
+            float dy = (e.Destination.Y - e.Source.Y) / 3;
+            if(e.Source.BezierVertex is null)
+                e.Source.BezierVertex = new Vertex(e.Source.X + dx, e.Source.Y + dy);
+            if (e.Destination.BezierVertex is null)
+                e.Destination.BezierVertex = new Vertex(e.Destination.X - dx, e.Destination.Y - dy);
+
+            procU.RemoveAllConstraints(e);
+
+        }
+
         #region Basic user operations
 
         /// <summary>
@@ -127,7 +140,7 @@ namespace PolygonApp.PolygonPresentationUnit
                     Polygons.Add(newPolygon);
                 }
             }
-            else if (firstPoint.Contains(x, y))
+            else if (firstPoint.Contains(x, y).Check)
             {
                 if (newPolygon.Points.Count >= 3)
                 {
@@ -278,7 +291,7 @@ namespace PolygonApp.PolygonPresentationUnit
             foreach (var (nextV, cals, (newX, newY)) in procU.CalculateConstraintPositions(v, callers))
                 if (!float.IsNaN(newX) && !float.IsNaN(newX))
                 {
-                    foreach(var cal in cals)
+                    foreach (var cal in cals)
                     {
                         cal.NewX ??= cal.X;
                         cal.NewY ??= cal.Y;
@@ -334,8 +347,19 @@ namespace PolygonApp.PolygonPresentationUnit
                 foreach (var point in poly.Points)
                 {
                     float newPos;
-                    if ((newPos = point.NewX.GetValueOrDefault()) != default) point.X = newPos;
-                    if ((newPos = point.NewY.GetValueOrDefault()) != default) point.Y = newPos;
+                    if ((newPos = point.NewX.GetValueOrDefault()) != default)
+                        point.X = newPos;
+                    if ((newPos = point.NewY.GetValueOrDefault()) != default)
+                        point.Y = newPos;
+
+                    if(!(point.BezierVertex is null))
+                    {
+                        if ((newPos = point.BezierVertex.NewX.GetValueOrDefault()) != default)
+                            point.BezierVertex.X = newPos;
+                        if ((newPos = point.BezierVertex.NewY.GetValueOrDefault()) != default)
+                            point.BezierVertex.Y = newPos;
+                    }
+
                     point.NewX = point.NewY = null;
                 }
             RedrawCanvas();

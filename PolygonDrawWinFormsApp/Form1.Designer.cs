@@ -36,6 +36,7 @@ namespace PolygonDrawWinFormsApp
             this.PerpendicularButton = new System.Windows.Forms.RadioButton();
             this.LengthButton = new System.Windows.Forms.RadioButton();
             this.NormalButton = new System.Windows.Forms.RadioButton();
+            this.BezierButton = new System.Windows.Forms.RadioButton();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Canvas)).BeginInit();
             this.ModesGroupBox.SuspendLayout();
@@ -91,13 +92,14 @@ namespace PolygonDrawWinFormsApp
             // 
             // ModesGroupBox
             // 
+            this.ModesGroupBox.Controls.Add(this.BezierButton);
             this.ModesGroupBox.Controls.Add(this.PerpendicularButton);
             this.ModesGroupBox.Controls.Add(this.LengthButton);
             this.ModesGroupBox.Controls.Add(this.NormalButton);
             this.ModesGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.ModesGroupBox.Location = new System.Drawing.Point(1035, 53);
             this.ModesGroupBox.Name = "ModesGroupBox";
-            this.ModesGroupBox.Size = new System.Drawing.Size(144, 350);
+            this.ModesGroupBox.Size = new System.Drawing.Size(144, 450);
             this.ModesGroupBox.TabIndex = 2;
             this.ModesGroupBox.TabStop = false;
             this.ModesGroupBox.Text = "App Modes";
@@ -146,6 +148,19 @@ namespace PolygonDrawWinFormsApp
             this.NormalButton.UseVisualStyleBackColor = true;
             this.NormalButton.CheckedChanged += new System.EventHandler(this.Button_CheckedChanged);
             // 
+            // BezierButton
+            // 
+            this.BezierButton.Appearance = System.Windows.Forms.Appearance.Button;
+            this.BezierButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.BezierButton.Location = new System.Drawing.Point(3, 323);
+            this.BezierButton.Name = "BezierButton";
+            this.BezierButton.Size = new System.Drawing.Size(138, 100);
+            this.BezierButton.TabIndex = 3;
+            this.BezierButton.TabStop = true;
+            this.BezierButton.Text = "Bezier";
+            this.BezierButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.BezierButton.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -172,6 +187,7 @@ namespace PolygonDrawWinFormsApp
         private System.Windows.Forms.RadioButton LengthButton;
         private System.Windows.Forms.RadioButton NormalButton;
         private System.Windows.Forms.RadioButton PerpendicularButton;
+        private System.Windows.Forms.RadioButton BezierButton;
     }
 }
 

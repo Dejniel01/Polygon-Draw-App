@@ -158,6 +158,28 @@ namespace PolygonApp.PolygonModel.Helpers
             }
         }
 
+        public static void Bezier(Vertex v0, Vertex v1, Vertex v2, Vertex v3, Bitmap drawArea)
+        {
+            float A0x = v0.X;
+            float A1x = 3 * (v1.X - v0.X);
+            float A2x = 3 * (v2.X - 2 * v1.X + v0.X);
+            float A3x = v3.X - 3 * v2.X + 3 * v1.X - v0.X;
+
+            float A0y = v0.Y;
+            float A1y = 3 * (v1.Y - v0.Y);
+            float A2y = 3 * (v2.Y - 2 * v1.Y + v0.Y);
+            float A3y = v3.Y - 3 * v2.Y + 3 * v1.Y - v0.Y;
+
+            for (float t = 0; t <= 1; t += 0.001f)
+            {
+                int x = Round(((A3x * t + A2x) * t + A1x) * t + A0x);
+                int y = Round(((A3y * t + A2y) * t + A1y) * t + A0y);
+
+                if (x >= 0 && x < drawArea.Width && y >= 0 && y < drawArea.Height)
+                    drawArea.SetPixel(x, y, Color.Black);
+            }
+        }
+
         /// <summary>
         /// Gets objects placed in point specified
         /// </summary>
@@ -171,19 +193,21 @@ namespace PolygonApp.PolygonModel.Helpers
             {
                 int n = polygon.Points.Count;
 
-                if (polygon.Points[0].Contains(x, y))
-                    return (polygon, null, polygon.Points[0]);
+                (bool Check, IDrawingElement Obj) ret;
+
+                if ((ret = polygon.Points[0].Contains(x, y)).Check)
+                    return (polygon, null, ret.Obj as Vertex);
 
                 for (int i = 0; i < n; i++)
                 {
-                    if (polygon.Points[Increment(i, n)].Contains(x, y))
-                        return (polygon, null, polygon.Points[Increment(i, n)]);
+                    if ((ret = polygon.Points[Increment(i, n)].Contains(x, y)).Check)
+                        return (polygon, null, ret.Obj as Vertex);
                     if (IsOnLine(x, y, polygon.Points[i].X, polygon.Points[i].Y, polygon.Points[Increment(i, n)].X, polygon.Points[Increment(i, n)].Y))
                         return (polygon, new Edge(polygon.Points[i], polygon.Points[Increment(i, n)]), null);
                 }
             }
 
-            return (polygons.Where(poly => poly.Contains(x, y)).FirstOrDefault(), null, null);
+            return (polygons.Where(poly => poly.Contains(x, y).Check).FirstOrDefault(), null, null);
         }
 
         /// <summary>

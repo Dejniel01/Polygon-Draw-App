@@ -8,6 +8,6 @@ namespace PolygonApp.PolygonModel.Structures
     public interface IDrawingElement
     {
         public void Draw(Bitmap drawArea, bool useBresenham);
-        public bool Contains(float x, float y);
+        public (bool Check, IDrawingElement obj) Contains(float x, float y);
     }
 }
