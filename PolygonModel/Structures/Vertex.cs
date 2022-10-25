@@ -29,8 +29,8 @@ namespace PolygonApp.PolygonModel.Structures
             }
             set
             {
-                if (!(BezierVertex is null))
-                    BezierVertex.X += value - _x;
+                foreach (var bez in BezierVertices)
+                    bez.Value.X += value - _x;
                 _x = value;
             }
         }
@@ -44,8 +44,8 @@ namespace PolygonApp.PolygonModel.Structures
             }
             set
             {
-                if (!(BezierVertex is null))
-                    BezierVertex.Y += value - _y;
+                foreach (var bez in BezierVertices)
+                    bez.Value.Y += value - _y;
                 _y = value;
             }
         }
@@ -56,8 +56,9 @@ namespace PolygonApp.PolygonModel.Structures
             get => _newX;
             set
             {
-                if (value is null && !(BezierVertex is null))
-                    BezierVertex.NewX = null;
+                if (value is null)
+                    foreach (var bez in BezierVertices)
+                        bez.Value.NewX = null;
                 _newX = value;
             }
         }
@@ -68,20 +69,24 @@ namespace PolygonApp.PolygonModel.Structures
             get => _newY;
             set
             {
-                if (value is null && !(BezierVertex is null))
-                    BezierVertex.NewY = null;
+                if (value is null)
+                    foreach (var bez in BezierVertices)
+                        bez.Value.NewY = null;
                 _newY = value;
             }
         }
 
-        public Vertex BezierVertex { get; set; } = null;
+        //public Vertex BezierVertex { get; set; } = null;
+
+        public Dictionary<Vertex, Vertex> BezierVertices { get; private set; } = new Dictionary<Vertex, Vertex>();
 
         public void Draw(Bitmap drawArea, bool useBresenham = false)
         {
             using Graphics g = Graphics.FromImage(drawArea);
             g.FillEllipse(Brushes.Black, X - R, Y - R, 2 * R, 2 * R);
 
-            BezierVertex?.Draw(drawArea);
+            foreach (var bez in BezierVertices)
+                bez.Value.Draw(drawArea);
             //g.DrawString(_id.ToString(), SystemFonts.DefaultFont, Brushes.Black, X - R, Y - R);
         }
 
@@ -89,8 +94,11 @@ namespace PolygonApp.PolygonModel.Structures
         {
             if ((x - X) * (x - X) + (y - Y) * (y - Y) <= R * R)
                 return (true, this);
-            if (!(BezierVertex is null))
-                return BezierVertex.Contains(x, y);
+
+            foreach (var bez in BezierVertices)
+                if (bez.Value.Contains(x, y).Check)
+                    return (true, bez.Value);
+
             return (false, this);
         }
 

@@ -28,17 +28,20 @@ namespace PolygonApp.PolygonModel.Structures
             using (Graphics g = Graphics.FromImage(drawArea))
             {
                 for (int i = 0; i < Points.Count - 1; i++)
-                    if (!(Points[i].BezierVertex is null || Points[i + 1].BezierVertex is null))
+                    if (Points[i].BezierVertices.TryGetValue(Points[i + 1], out var bez1))
                     {
-                        using (Pen dashedPen = new Pen(Color.Gray))
+                        if (Points[i + 1].BezierVertices.TryGetValue(Points[i], out var bez2))
                         {
-                            dashedPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-                            g.DrawLine(dashedPen, Points[i].X, Points[i].Y, Points[i].BezierVertex.X, Points[i].BezierVertex.Y);
-                            g.DrawLine(dashedPen, Points[i].BezierVertex.X, Points[i].BezierVertex.Y, Points[i + 1].BezierVertex.X, Points[i + 1].BezierVertex.Y);
-                            g.DrawLine(dashedPen, Points[i + 1].BezierVertex.X, Points[i + 1].BezierVertex.Y, Points[i + 1].X, Points[i + 1].Y);
+                            using (Pen dashedPen = new Pen(Color.Gray))
+                            {
+                                dashedPen.DashPattern = new float[] { 10, 10 };
+                                g.DrawLine(dashedPen, Points[i].X, Points[i].Y, bez1.X, bez1.Y);
+                                g.DrawLine(dashedPen, bez1.X, bez1.Y, bez2.X, bez2.Y);
+                                g.DrawLine(dashedPen, bez2.X, bez2.Y, Points[i + 1].X, Points[i + 1].Y);
+                            }
+                            Utils.Bezier(Points[i], bez1, bez2, Points[i + 1], drawArea);
+                            //g.DrawBezier(Pens.Black, Points[i].X, Points[i].Y, Points[i].BezierVertex.X, Points[i].BezierVertex.Y, Points[i + 1].BezierVertex.X, Points[i + 1].BezierVertex.Y, Points[i + 1].X, Points[i + 1].Y);
                         }
-                        Utils.Bezier(Points[i], Points[i].BezierVertex, Points[i + 1].BezierVertex, Points[i+1], drawArea);
-                        //g.DrawBezier(Pens.Black, Points[i].X, Points[i].Y, Points[i].BezierVertex.X, Points[i].BezierVertex.Y, Points[i + 1].BezierVertex.X, Points[i + 1].BezierVertex.Y, Points[i + 1].X, Points[i + 1].Y);
                     }
                     else
                     {
@@ -48,18 +51,21 @@ namespace PolygonApp.PolygonModel.Structures
                             g.DrawLine(Pens.Black, Points[i].X, Points[i].Y, Points[i + 1].X, Points[i + 1].Y);
                     }
                 if (IsClosed)
-                    if (!(Points[^1].BezierVertex is null || Points[0].BezierVertex is null))
+                    if (Points[^1].BezierVertices.TryGetValue(Points[0], out var bez1))
                     {
-                        using (Pen dashedPen = new Pen(Color.Gray))
+                        if (Points[0].BezierVertices.TryGetValue(Points[^1], out var bez2))
                         {
-                            dashedPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-                            g.DrawLine(dashedPen, Points[^1].X, Points[^1].Y, Points[^1].BezierVertex.X, Points[^1].BezierVertex.Y);
-                            g.DrawLine(dashedPen, Points[^1].BezierVertex.X, Points[^1].BezierVertex.Y, Points[0].BezierVertex.X, Points[0].BezierVertex.Y);
-                            g.DrawLine(dashedPen, Points[0].BezierVertex.X, Points[0].BezierVertex.Y, Points[0].X, Points[0].Y);
-                        }
+                            using (Pen dashedPen = new Pen(Color.Gray))
+                            {
+                                dashedPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+                                g.DrawLine(dashedPen, Points[^1].X, Points[^1].Y, bez1.X, bez1.Y);
+                                g.DrawLine(dashedPen, bez1.X, bez1.Y, bez2.X, bez2.Y);
+                                g.DrawLine(dashedPen, bez2.X, bez2.Y, Points[0].X, Points[0].Y);
+                            }
 
-                        Utils.Bezier(Points[^1], Points[^1].BezierVertex, Points[0].BezierVertex, Points[0], drawArea);
-                        //g.DrawBezier(Pens.Black, Points[^1].X, Points[^1].Y, Points[^1].BezierVertex.X, Points[^1].BezierVertex.Y, Points[0].BezierVertex.X, Points[0].BezierVertex.Y, Points[0].X, Points[0].Y);
+                            Utils.Bezier(Points[^1], bez1, bez2, Points[0], drawArea);
+                            //g.DrawBezier(Pens.Black, Points[^1].X, Points[^1].Y, Points[^1].BezierVertex.X, Points[^1].BezierVertex.Y, Points[0].BezierVertex.X, Points[0].BezierVertex.Y, Points[0].X, Points[0].Y);
+                        }
                     }
                     else
                     {

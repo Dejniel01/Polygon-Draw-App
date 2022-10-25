@@ -107,13 +107,14 @@ namespace PolygonApp.PolygonPresentationUnit
         {
             float dx = (e.Destination.X - e.Source.X) / 3;
             float dy = (e.Destination.Y - e.Source.Y) / 3;
-            if(e.Source.BezierVertex is null)
-                e.Source.BezierVertex = new Vertex(e.Source.X + dx, e.Source.Y + dy);
-            if (e.Destination.BezierVertex is null)
-                e.Destination.BezierVertex = new Vertex(e.Destination.X - dx, e.Destination.Y - dy);
+            e.Source.BezierVertices.Add(e.Destination, new Vertex(e.Source.X + dx, e.Source.Y + dy));
+            e.Destination.BezierVertices.Add(e.Source, new Vertex(e.Destination.X - dx, e.Destination.Y - dy));
+            //if(e.Source.BezierVertex is null)
+            //    e.Source.BezierVertex = new Vertex(e.Source.X + dx, e.Source.Y + dy);
+            //if (e.Destination.BezierVertex is null)
+            //    e.Destination.BezierVertex = new Vertex(e.Destination.X - dx, e.Destination.Y - dy);
 
             procU.RemoveAllConstraints(e);
-
         }
 
         #region Basic user operations
@@ -196,7 +197,10 @@ namespace PolygonApp.PolygonPresentationUnit
                 {
                     var neighs = poly.GetNeighbors(point);
                     foreach (var neigh in neighs)
+                    {
+                        neigh.BezierVertices.Remove(point);
                         procU.RemoveAllConstraints(new Edge(point, neigh));
+                    }
 
                     poly.Points.Remove(point);
                     vertexToPolygonDictionary.Remove(point);
@@ -352,13 +356,15 @@ namespace PolygonApp.PolygonPresentationUnit
                     if ((newPos = point.NewY.GetValueOrDefault()) != default)
                         point.Y = newPos;
 
-                    if(!(point.BezierVertex is null))
+                    foreach (var bez in point.BezierVertices)
                     {
-                        if ((newPos = point.BezierVertex.NewX.GetValueOrDefault()) != default)
-                            point.BezierVertex.X = newPos;
-                        if ((newPos = point.BezierVertex.NewY.GetValueOrDefault()) != default)
-                            point.BezierVertex.Y = newPos;
+                        if ((newPos = bez.Value.NewX.GetValueOrDefault()) != default)
+                            bez.Value.X = newPos;
+
+                        if ((newPos = bez.Value.NewY.GetValueOrDefault()) != default)
+                            bez.Value.Y = newPos;
                     }
+
 
                     point.NewX = point.NewY = null;
                 }
